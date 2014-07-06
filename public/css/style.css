@@ -1,0 +1,40 @@
+body {
+    background: url('../img/template/bg.png') repeat;
+}
+.header-container {
+	width: 1200px;
+	height: 52px;
+	margin: 0 auto;
+}
+.main-content, .left-content {
+    padding: 5px;
+    border: 2px solid #B78C77;
+    background-color: #F8F8F8;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    -moz-box-shadow: 4px 4px 4px #888;
+    -webkit-box-shadow: 4px 4px 4px #888;
+    box-shadow: 4px 4px 4px #888;
+    min-height: 500px;
+}
+.left-content {
+    margin-right: 15px;
+}
+.main-title, .left-title {
+    color: #B78C77;
+    font-size: 2em;
+    font-style: italic;
+    text-decoration: underline;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.center {
+	text-align: center;
+}
+.line {
+	margin-bottom: 5px;
+}
+.dotted {
+	border-bottom: 1px dashed !important;
+}
