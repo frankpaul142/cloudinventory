@@ -8,5 +8,5 @@
     <br />
     Atentamente,<br />
     <br />
-    Club Miles
+    CloudInventory
 @stop

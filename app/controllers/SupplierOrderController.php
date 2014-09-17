@@ -1,32 +1,26 @@
 <?php
-class SupplierController extends BaseController
+class SupplierOrderController extends BaseController
 {
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$suppliers = Supplier::withTrashed()->orderBy('name')->get();
+		$supplierOrders = SupplierOrder::where('status','generated')->get();
 
-		$selectedSupplier = self::__checkExistence($id);
-		if (! $selectedSupplier) {
-    		$selectedSupplier = new Supplier;
+		$selectedSupplierOrder = self::__checkExistence($id);
+		if (! $selectedSupplierOrder) {
+    		$selectedSupplierOrder = new SupplierOrder;
     	}
 
-        $allProducts = Product::orderBy('name')->get()->lists('name','id');
-        
-        $selectedSupplierProducts = $selectedSupplier->products()->orderBy('name')->get()->toArray();
-
-        return View::make('suppliers.main')
+        return View::make('supplierOrders.main')
             ->with('id', $id)
-            ->with('allProducts', $allProducts)
-            ->with('selectedSupplierProducts', array_fetch($selectedSupplierProducts,'id'))
-        	->with('selectedSupplier', $selectedSupplier)
-        	->with('suppliers', $suppliers);
+        	->with('selectedSupplierOrder', $selectedSupplierOrder)
+        	->with('supplierOrders', $supplierOrders);
 	}
 
 	public function post()
 	{
 		$post = Input::all();
-		$validator = Supplier::validate($post);
+		$validator = SupplierOrder::validate($post);
 		$supplierId = $post['id'];
 
 		if ($validator->fails()) {
@@ -34,7 +28,7 @@ class SupplierController extends BaseController
         } else {
     		$supplier = self::__checkExistence($supplierId);
         	if (! $supplierId) {
-        		$supplier = new Supplier;
+        		$supplier = new SupplierOrder;
         	}
         	$supplier->name = $post['name'];
         	$supplier->minimum_stock = $post['minimum_stock'];
@@ -59,7 +53,7 @@ class SupplierController extends BaseController
     {
         $post = Input::all();
         $supplierId = $post['supplierId'];
-        $supplier = Supplier::find($supplierId);
+        $supplier = SupplierOrder::find($supplierId);
         if ($post['action'] == 'select') {
             $supplier->products()->attach($post['items'][0]);
         } else {
@@ -73,11 +67,11 @@ class SupplierController extends BaseController
 	/**
 	* Checks if the parameter is a valid supplier id
 	* @param $id int
-	* @return Supplier object if $id is found, otherwise false
+	* @return SupplierOrder object if $id is found, otherwise false
 	*/
 	private function __checkExistence($id){
 		if (! is_null($id) && $id != '') {
-    		$supplier = Supplier::withTrashed()->find($id);
+    		$supplier = SupplierOrder::find($id);
     		if (is_null($supplier)) {
     			return false;
     		}

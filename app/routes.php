@@ -26,8 +26,8 @@ Route::pattern('id', '[0-9]+');
     Route::get('recordar/form/{token}', 'RemindersController@getReset');
     Route::post('recordar/form', 'RemindersController@postReset');
 
-    // Route::group(array('before' => 'auth|pageControl'), function(){
-    Route::group(array('before' => ''), function(){
+    Route::group(array('before' => 'auth|pageControl'), function(){
+
         //change password on first login
         Route::get('cambiarContrasena', 'LoginController@getChangePassword');
         Route::post('cambiarContrasena', 'LoginController@postChangePassword');
@@ -35,18 +35,24 @@ Route::pattern('id', '[0-9]+');
         //users
         Route::get('usuarios/{id?}', 'UserController@get');
         Route::post('usuarios', 'UserController@post');
-        Route::post('usuarios/changeStatus', 'UserController@postChangeStatus');
         
-        
-        //suppliers
-        Route::get('proveedores', 'SupplierController@getIndex');
-        Route::get('proveedores/form/{id?}', 'SupplierController@getForm');
-        Route::post('proveedores/form', 'SupplierController@postForm');
-        Route::get('proveedores/eliminar/{id}', 'SupplierController@getDelete');
-            
+        //products
+        Route::get('productos/{id?}', 'ProductController@get');
+        Route::post('productos', 'ProductController@post');
+
+        //products
+        Route::get('distribuidores/{id?}', 'SupplierController@get');
+        Route::post('distribuidores', 'SupplierController@post');
+        Route::post('distribuidoresProductos', 'SupplierController@postProductos');
+
+        //orders
+        Route::get('pedidos/{id?}', 'SupplierOrderController@get');
+        Route::post('pedidos', 'SupplierOrderController@post');
     });
     //root
     Route::get('/', function(){
-        return View::make('hello');
+        $passwordText = '12345678';
+        $passwordHashed = Hash::make($passwordText);
+        dd($passwordHashed);
     });
 

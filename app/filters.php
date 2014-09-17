@@ -45,7 +45,7 @@ Route::filter('auth.basic', function()
 });
 
 Route::filter('pageControl', function(){
-	return true;
+	
 });
 
 /*

@@ -37,7 +37,7 @@ return array(
 	"exists"               => "The selected :attribute is invalid.",
 	"image"                => "The :attribute must be an image.",
 	"in"                   => "The selected :attribute is invalid.",
-	"integer"              => "The :attribute must be an integer.",
+	"integer"              => "El valor debe ser un entero.",
 	"ip"                   => "The :attribute must be a valid IP address.",
 	"max"                  => array(
 		"numeric" => "The :attribute may not be greater than :max.",

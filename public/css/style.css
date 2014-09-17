@@ -21,6 +21,10 @@ body {
 .left-content {
     margin-right: 15px;
 }
+.left-content a{
+    text-decoration: none;
+    color: #000;
+}
 .main-title, .left-title {
     color: #B78C77;
     font-size: 2em;
@@ -37,4 +41,10 @@ body {
 }
 .dotted {
 	border-bottom: 1px dashed !important;
+}
+.glyphicon{
+    cursor: pointer;
+}
+.nav-tabs {
+    margin-bottom: 10px;
 }

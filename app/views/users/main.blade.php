@@ -1,19 +1,22 @@
 @extends('layouts.master')
 
-@section('styles')
-	@parent
-	<style type="text/css">
-		.glyphicon{
-			cursor: pointer;
-		}
-	</style>
-@stop
-
 @section('left-title')
-	Usuarios
+	<div class="col-xs-10 line">
+		Usuarios
+	</div>
+	<div class="col-xs-2 line">
+		{{ link_to('usuarios', '', array('class' => 'glyphicon glyphicon-plus', 'style' => 'color: green;font-size: 1em;')) }}
+	</div>
 @stop
 @section('left-content')
-	
+	@foreach ($users as $user)
+		<div class="col-xs-12 line">
+			{{ link_to('usuarios/'.$user->id, $user->last_name . ' ' . $user->name) }}
+			@if($id==$user->id)
+				&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open"></span>
+			@endif
+		</div>
+	@endforeach
 @stop
 
 
@@ -76,24 +79,4 @@
 			</div>
 		</div>
 	{{ Form::close() }}
-@stop
-
-@section('js')
-	@parent
-	<script type="text/javascript">
-		TESIS.Users = TESIS.Users || {};
-
-		TESIS.Users = {
-			setListeners: function(){
-				
-			},
-			init: function() {
-				TESIS.Users.setListeners();
-			}
-		};
-
-		$(document).ready(function() {
-			TESIS.Users.init();
-		});
-	</script>
 @stop

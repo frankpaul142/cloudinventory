@@ -2,8 +2,7 @@
 
 class Supplier extends Eloquent
 {
-    protected $table = 'suppliers';
-    protected $softDelete = true;
+    protected $table = 'supplier_orders';
 
     public static function validate($post)
 	{
@@ -21,6 +20,9 @@ class Supplier extends Eloquent
 	}
 
     public function products(){
-        return $this->belongsToMany('Product','supplier_products','suppliers_id','products_id');
+        return $this->hasMany('Product');
+    }
+    public function supplier(){
+        return $this->belongsTo('Supplier');
     }
 }

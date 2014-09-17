@@ -4,7 +4,7 @@ class UserController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$users = User::withTrashed()->get();
+		$users = User::withTrashed()->orderBy('last_name')->get();
 
 		$selectedUser = self::__checkExistence($id);
 		if (! $selectedUser) {
@@ -14,6 +14,7 @@ class UserController extends BaseController
     	$profiles = array('' => ' - Seleccione - ') + User::$profiles;
 
         return View::make('users.main')
+            ->with('id', $id)
         	->with('selectedUser', $selectedUser)
         	->with('profiles', $profiles)
         	->with('users', $users);
@@ -48,6 +49,17 @@ class UserController extends BaseController
     			$user->password = $passwordHashed;
     		}
 
+    		//save user data
+        		$user->save();
+
+        	if ($post['status']=='inactive') {
+        		$user->delete();
+        	} else {
+        		if ($user->trashed()) {
+        			$user->restore();
+        		}
+        	}
+
         	if ($sendMail) {
 				$mailView = 'emails.newPassword';
 				$subject = 'Bienvenido a CloudInventory';
@@ -64,30 +76,10 @@ class UserController extends BaseController
 				);
         	}
 
-	        //save user data
-        		$user->save();
-
-        	Session::flash('message', 'Usuario guardado correctamente.');
+        	Session::flash('success', 'Usuario guardado correctamente.');
         	return Redirect::to('usuarios');
 
         }
-	}
-
-	public function getChangeStatus($id)
-	{
-	    $userId = $id;
-		$user = self::__checkExistence($userId);
-		if ( ! $user) {
-			return Redirect::to('usuarios');
-		}
-		if ($user->trashed()) {
-			$user->restore();
-			Session::flash('success', 'Usuario activado exitosamente.');
-		} else {
-			$user->delete();
-			Session::flash('success', 'Usuario desactivado exitosamente.');
-		}
-		return Redirect::to('usuarios');
 	}
 
 

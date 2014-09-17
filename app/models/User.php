@@ -51,36 +51,6 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         return $validator;
     }
 
-    public static function hasAccess($userId, $url){
-        $select = 
-            "SELECT 1
-            FROM profile_pages pp
-            JOIN users u ON pp.profiles_id = u.profiles_id AND u.id = ?
-            WHERE pp.pages_id = (SELECT p.id FROM pages p WHERE p.url = ?)
-            UNION
-            SELECT 1
-            FROM extra_actions ea
-            WHERE ea.url = ?
-            AND ea.pages_id IN (
-                SELECT pages_id
-                FROM profile_pages pp
-                JOIN users u ON pp.profiles_id = u.profiles_id AND u.id = ?
-            )";
-
-        $result = DB::select($select, array($userId, $url, $url, $userId));
-        if (! empty($result)) {
-            return true;
-        }
-        return false;
-    }
-
-    ### RELATIONSHIPS ###
-    public function profile()
-    {
-        return $this->belongsTo('Profile','profiles_id');
-    }
-
-
     ### REQUIRED FOR AUTH. DO NOT TOUCH ###
     protected $hidden = array('password');
 

@@ -10,9 +10,9 @@
 		<!-- CSS -->
 	    @section('styles')
 	        {{ HTML::style('css/bootstrap.min.css') }}
-	        {{ HTML::style('css/style.css') }}
 	        {{ HTML::style('css/jquery.dataTables.min.css') }}
-	        {{ HTML::style('css/menu.css') }}
+	        {{ HTML::style('css/style.css') }}
+	        {{ HTML::style('css/multi-select.css') }}
 	    @show
 	</head>
 	<body>
@@ -28,8 +28,9 @@
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
 							<li>{{ link_to('usuarios', 'Usuarios') }}</li>
-							<li>{{ link_to('', 'Productos') }}</li>
-							<li>{{ link_to('', 'Proveedores') }}</li>
+							<li>{{ link_to('productos', 'Productos') }}</li>
+							<li>{{ link_to('distribuidores', 'Distribuidores') }}</li>
+							<li>{{ link_to('pedidos', 'Pedidos') }}</li>
 							<li>{{ link_to('', 'Ajustes') }}</li>
 							<li>{{ link_to('', 'Alertas') }}</li>
 						</ul>
@@ -48,16 +49,16 @@
 			</nav>
 	        <div class="container">
 	        	@if (Session::has('warning'))
-                    <div class="alert alert-warning col-md-12 ">{{ Session::get('warning') }}</div>
+                    <div class="alert alert-warning col-md-11">{{ Session::get('warning') }}</div>
                 @endif
                 @if (Session::has('info'))
-                    <div class="alert alert-info col-md-12 ">{{ Session::get('info') }}</div>
+                    <div class="alert alert-info col-md-11">{{ Session::get('info') }}</div>
                 @endif
                 @if (Session::has('success'))
-                    <div class="alert alert-success col-md-12 ">{{ Session::get('success') }}</div>
+                    <div class="alert alert-success col-md-11">{{ Session::get('success') }}</div>
                 @endif
                 @if (Session::has('error'))
-                    <div class="alert alert-danger col-md-12 ">{{ Session::get('error') }}</div>
+                    <div class="alert alert-danger col-md-11">{{ Session::get('error') }}</div>
                 @endif
                 <div class="col-xs-12">
 	                <div class="col-xs-3 left-content">
@@ -76,10 +77,11 @@
 			</div>
 			<!-- Javascripts -->
 		    @section('js')
-		        {{ HTML::script('js/jquery-1.10.2.min.js') }}
+		        {{ HTML::script('js/jquery-1.11.1.min.js') }}
 		        {{ HTML::script('js/bootstrap.min.js') }}
-		        {{ HTML::script('js/menu.js') }}
+		        {{ HTML::script('js/jquery.autosize.min.js') }}
 		        {{ HTML::script('js/jquery.dataTables.min.js') }}
+		        {{ HTML::script('js/jquery.multi-select.js') }}
 		        <script type="text/javascript">
 		            var TESIS = TESIS || {};
 		            TESIS.url = '{{ URL::to('') }}';
