@@ -39,8 +39,9 @@ Route::pattern('id', '[0-9]+');
         //products
         Route::get('productos/{id?}', 'ProductController@get');
         Route::post('productos', 'ProductController@post');
+        Route::post('productos/cargarProductosProveedor', 'ProductController@postLoadSupplierProducts');
 
-        //products
+        //suppliers
         Route::get('distribuidores/{id?}', 'SupplierController@get');
         Route::post('distribuidores', 'SupplierController@post');
         Route::post('distribuidoresProductos', 'SupplierController@postProductos');
@@ -48,11 +49,24 @@ Route::pattern('id', '[0-9]+');
         //orders
         Route::get('pedidos/{id?}', 'SupplierOrderController@get');
         Route::post('pedidos', 'SupplierOrderController@post');
+
+        //adjustments
+        Route::get('ajustes/{id?}', 'AdjustmentController@get');
+        Route::post('ajustes', 'AdjustmentController@post');
+        
+        //alerts
+        Route::get('alertas/{id?}', 'AlertController@get');
+        Route::post('alertas', 'AlertController@post');
+
     });
     //root
     Route::get('/', function(){
         $passwordText = '12345678';
         $passwordHashed = Hash::make($passwordText);
         dd($passwordHashed);
+    });
+
+    Route::get('test', function(){
+        Globals::triggerAlerts(1, array('productId'=>3));
     });
 

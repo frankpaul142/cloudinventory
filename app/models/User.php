@@ -51,6 +51,10 @@ class User extends Eloquent implements UserInterface, RemindableInterface
         return $validator;
     }
 
+    public function alerts(){
+        return $this->belongsToMany('Alert','alerts_to','users_id','alerts_id')->withPivot('to_facebook', 'to_email', 'to_sms')->withTimestamps();
+    }
+
     ### REQUIRED FOR AUTH. DO NOT TOUCH ###
     protected $hidden = array('password');
 

@@ -49,6 +49,21 @@ class ProductController extends BaseController
         }
 	}
 
+    public function postLoadSupplierProducts()
+    {
+        if (Request::ajax()) {
+            $post = Input::all();
+            $supplier = Supplier::find($post['suppliersId']);
+            if (! is_null($supplier)) {
+                $products = $supplier->products()->orderBy('name')->get()->lists('name','id');
+                $products = array('' => ' - Seleccione - ') + $products;
+                return Form::select('product', $products, null, array('class' => 'form-control', 'id' => 'product'));
+            } else {
+                return Form::select('product', array('' => ' - Seleccione - '), null, array('class' => 'form-control', 'id' => 'product'));
+            }
+        }
+    }
+
 
 	### PRIVATE FUNCTIONS ###
 	/**

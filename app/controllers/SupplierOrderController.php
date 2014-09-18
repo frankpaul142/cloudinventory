@@ -11,41 +11,73 @@ class SupplierOrderController extends BaseController
     		$selectedSupplierOrder = new SupplierOrder;
     	}
 
+        $products = $selectedSupplierOrder->products->toArray();
+        $suppliers = Supplier::orderBy('name')->get()->lists('name','id');
+
         return View::make('supplierOrders.main')
             ->with('id', $id)
-        	->with('selectedSupplierOrder', $selectedSupplierOrder)
+            ->with('selectedSupplierOrder', $selectedSupplierOrder)
+            ->with('products', $products)
+        	->with('suppliers', $suppliers)
         	->with('supplierOrders', $supplierOrders);
 	}
 
 	public function post()
 	{
 		$post = Input::all();
-		$validator = SupplierOrder::validate($post);
-		$supplierId = $post['id'];
+        if ($post['products'] == '[]') {
+            $post['products'] = '';
+        }
 
-		if ($validator->fails()) {
-            return Redirect::to('distribuidores/'.$supplierId)->withErrors($validator)->withInput();
+        $validator = SupplierOrder::validate($post);
+
+        if ($validator->fails()) {
+            return Redirect::to('pedidos/'.$post['id'])->withErrors($validator)->withInput();
         } else {
-    		$supplier = self::__checkExistence($supplierId);
-        	if (! $supplierId) {
-        		$supplier = new SupplierOrder;
-        	}
-        	$supplier->name = $post['name'];
-        	$supplier->minimum_stock = $post['minimum_stock'];
-        	$supplier->cost = $post['cost'];
-    		$supplier->save();
+            try {
+                DB::transaction(function() use ($post){
+                    $supplierOrder = self::__checkExistence($post['id']);
+                    if (! $supplierOrder) {
+                        $supplierOrder = new SupplierOrder;
+                        $supplierOrder->suppliers_id = $post['suppliers_id'];
+                        $supplierOrder->users_id = Auth::user()->id;
+                        $supplierOrder->save();
 
-        	if ($post['status']='inactive') {
-        		$supplier->delete();
-        	} else {
-        		if ($supplier->trashed()) {
-        			$supplier->restore();
-        		}
-        	}
+                        $products = json_decode($post['products']);
+                        $toSync = array();
 
-        	Session::flash('success', 'Distribuidor guardado correctamente.');
-        	return Redirect::to('distribuidores');
+                        foreach($products as $current) {
+                            $product = Product::find($current->id);
+                            if ( ! is_null($product)) {
+                                $toSync[$current->id]['cost'] = $product->cost;
+                                $toSync[$current->id]['amount'] = $current->amount;
+                            }
+                        }
 
+                        $supplierOrder->products()->sync($toSync);
+                    } else {
+                        if(isset($post['received']) AND $post['received'] == 1) {
+                            $supplierOrder->status = 'received';
+                            $supplierOrder->save();
+
+                            foreach ($supplierOrder->products as $pivotProduct) {
+                                $array = $pivotProduct->toArray();
+                                $product = Product::find($array['id']);
+                                if ( ! is_null($product)) {
+                                    $product->stock = $product->stock + $array['pivot']['amount'];
+                                    $product->save();
+                                }
+                            }
+                        } else {
+                            Session::flash('error', 'Error en la recepción de su pedido, por favor vuelva a intentarlo.');
+                        }
+                    }
+                });
+                Session::flash('success', 'Pedido procesado exitosamente.');
+            } catch (Exception $e) {
+                Session::flash('error', 'Ocurrió un error inesperado, por favor vuelva a intentarlo.');
+            }
+            return Redirect::to('pedidos'); 
         }
 	}
 

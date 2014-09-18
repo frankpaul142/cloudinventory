@@ -2,7 +2,7 @@
 
 @section('left-title')
 	<div class="col-xs-10 line">
-		Pedidos Pendientes
+		Pendientes
 	</div>
 	<div class="col-xs-2 line">
 		{{ link_to('distribuidores', '', array('class' => 'glyphicon glyphicon-plus', 'style' => 'color: green;font-size: 1em;')) }}
@@ -11,7 +11,7 @@
 @section('left-content')
 	@foreach ($supplierOrders as $supplierOrder)
 		<div class="col-xs-12 line">
-			{{ link_to('distribuidores/'.$supplierOrder->id, $supplierOrder->name) }}
+			{{ link_to('pedidos/'.$supplierOrder->id, substr($supplierOrder->created_at, 0, 10) . ' - ' . $supplierOrder->supplier->name) }}
 			@if($id==$supplierOrder->id)
 				&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open"></span>
 			@endif
@@ -24,150 +24,169 @@
 	Pedidos
 @stop
 @section('main-content')
-	<ul class="nav nav-tabs" role="tablist">
-		<li class="active">
-			<a href="#detail" role="tab" data-toggle="tab">Detalle</a>
-		</li>
-		@if($selectedSupplier->id)
-			<li>
-				<a href="#products" role="tab" data-toggle="tab">Productos</a>
-			</li>
-		@endif
-	</ul>
-	<div class="tab-content">
-		<div class="tab-pane active" id="detail">
-			{{ Form::open(array('url' => 'distribuidores', 'role' => 'form', 'id' => 'frmSupplier')) }}
-				<div class="col-xs-12">
-					<div class="col-xs-12 line">
-						<div class="col-xs-5 line form-group {{ $errors->has('name') ? 'has-error' : '' }}">
-							{{ Form::label('name', 'Nombre:', array('class' => 'control-label')) }}
-							{{ Form::text('name', $selectedSupplier->name, array('class' => 'form-control', 'id' => 'name')) }}
-							{{ Form::label('', $errors->first('name'), array('class' => 'control-label')) }}
-						</div>
-						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('ruc') ? 'has-error' : '' }}">
-							{{ Form::label('ruc', 'RUC:', array('class' => 'control-label')) }}
-							{{ Form::text('ruc', $selectedSupplier->ruc, array('class' => 'form-control', 'id' => 'ruc')) }}
-							{{ Form::label('', $errors->first('ruc'), array('class' => 'control-label')) }}
-						</div>
-					</div>
-					<div class="col-xs-12 line">
-						<div class="col-xs-5 line form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
-							{{ Form::label('phone', 'Teléfono:', array('class' => 'control-label')) }}
-							{{ Form::text('phone', $selectedSupplier->phone, array('class' => 'form-control', 'id' => 'phone')) }}
-							{{ Form::label('', $errors->first('phone'), array('class' => 'control-label')) }}
-						</div>
-						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('email') ? 'has-error' : '' }}">
-							{{ Form::label('email', 'Email:', array('class' => 'control-label')) }}
-							{{ Form::text('email', $selectedSupplier->email, array('class' => 'form-control', 'id' => 'email')) }}
-							{{ Form::label('', $errors->first('email'), array('class' => 'control-label')) }}
-						</div>
-					</div>
-					<div class="col-xs-12 line">
-						<div class="col-xs-5 line form-group {{ $errors->has('web') ? 'has-error' : '' }}">
-							{{ Form::label('web', 'Página Web:', array('class' => 'control-label')) }}
-							{{ Form::text('web', $selectedSupplier->web, array('class' => 'form-control', 'id' => 'web')) }}
-							{{ Form::label('', $errors->first('web'), array('class' => 'control-label')) }}
-						</div>
-						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('address') ? 'has-error' : '' }}">
-							{{ Form::label('address', 'Dirección:', array('class' => 'control-label')) }}
-							{{ Form::text('address', $selectedSupplier->address, array('class' => 'form-control', 'id' => 'address')) }}
-							{{ Form::label('', $errors->first('address'), array('class' => 'control-label')) }}
-						</div>
-					</div>
-					<div class="col-xs-12 line">
-						<div class="col-xs-5 line form-group {{ $errors->has('contact') ? 'has-error' : '' }}">
-							{{ Form::label('contact', 'Nombre de Contacto:', array('class' => 'control-label')) }}
-							{{ Form::text('contact', $selectedSupplier->contact, array('class' => 'form-control', 'id' => 'contact')) }}
-							{{ Form::label('', $errors->first('contact'), array('class' => 'control-label')) }}
-						</div>
-						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('contact_phone') ? 'has-error' : '' }}">
-							{{ Form::label('contact_phone', 'Teléfono de Contacto:', array('class' => 'control-label')) }}
-							{{ Form::text('contact_phone', $selectedSupplier->contact_phone, array('class' => 'form-control', 'id' => 'contact_phone')) }}
-							{{ Form::label('', $errors->first('contact_phone'), array('class' => 'control-label')) }}
-						</div>
-					</div>
-					<div class="col-xs-12 line">
-						<div class="col-xs-5 line form-group {{ $errors->has('status') ? 'has-error' : '' }}">
-							{{ Form::label('status', 'Estado:', array('class' => 'control-label')) }}
-							{{ Form::select('status', array('active'=>'Activo', 'inactive'=>'Inactivo'),($selectedSupplier->trashed()?'inactive':'active'), array('class' => 'form-control', 'id' => 'status')) }}
-							{{ Form::label('', $errors->first('status'), array('class' => 'control-label')) }}
-						</div>
-					</div>
-					
-					<div class="col-xs-12 line center"><br /><br />
-						{{ Form::hidden('id', $selectedSupplier->id, array('id' => 'id')) }}
-						{{ link_to('distribuidores', 'Cancelar', array('class' => 'btn btn-danger')) }}
-						{{ Form::submit('Guardar', array('id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
-					</div>
+	{{ Form::open(array('url' => 'pedidos', 'role' => 'form', 'id' => 'frmSupplier')) }}
+		<div class="col-xs-12">
+			<div class="col-xs-12 line">
+				<div class="col-xs-5 line form-group {{ $errors->has('suppliers_id') ? 'has-error' : '' }}">
+					{{ Form::label('suppliers_id', 'Distribuidor:', array('class' => 'control-label')) }}
+					@if ( ! $selectedSupplierOrder->id)
+						{{ Form::select('suppliers_id', array('' => ' - Seleccione - ') + $suppliers, $selectedSupplierOrder->suppliers_id, array('class' => 'form-control', 'id' => 'suppliers_id')) }}
+					@else
+						{{ $selectedSupplierOrder->supplier->name }}
+						{{ Form::hidden('suppliers_id', $selectedSupplierOrder->suppliers_id) }}
+					@endif
+					{{ Form::label('', $errors->first('suppliers_id'), array('class' => 'control-label')) }}
 				</div>
-			{{ Form::close() }}
-		</div>
-		@if($selectedSupplier->id)
-			<div class="tab-pane" id="products">
-				<div class="col-xs-12">
-					<div class="col-xs-12 line">
-						<center>
-							{{ Form::select('not_selected', $allProducts, $selectedSupplierProducts, array('class' => 'form-control', 'id'=>'not_selected','multiple'=>'multiple')) }}
-						</center>
+				@if ( ! $selectedSupplierOrder->id)
+					<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('products') ? 'has-error' : '' }}">
+						{{ Form::label('product', 'Productos:', array('class' => 'control-label')) }}
+						<div>
+							{{ Form::select('product', array('' => ' - Seleccione - '), null, array('class' => 'form-control', 'id' => 'product')) }}
+						</div>
+						{{ Form::label('', $errors->first('products'), array('class' => 'control-label')) }}
 					</div>
-				</div>
+				@endif
 			</div>
-		@endif
-	</div>
+			
+			<div class="col-xs-12 line">
+				<table id="table" class="table table-striped">
+					<thead>
+						<tr>
+	                        <th class="col-xs-2">Cantidad</th>
+	                        <th>Producto</th>
+	                        @if ( ! $selectedSupplierOrder->id)
+								<th class="col-xs-1">Acciones</th>
+							@endif	
+						</tr>
+					</thead>
+					<tbody data-bind="foreach: products">
+						<tr data-bind="value: id">
+							@if ( ! $selectedSupplierOrder->id)
+		                        <td>
+		                            <span class="col-xs-1 glyphicon glyphicon-plus" data-bind="click: $root.addAmount"></span>
+		                            <span class="col-xs-1" data-bind="text: amount"></span>
+		                            <span class="col-xs-1 glyphicon glyphicon-minus" data-bind="click: $root.decreaseAmount"></span>
+		                        </td>
+	                        @else
+								<td>
+		                            <span class="col-xs-1" data-bind="text: amount"></span>
+		                        </td>
+							@endif
+	                        <td data-bind="text: name"></td>
+	                        @if ( ! $selectedSupplierOrder->id)
+		                        <td>
+		                            <span class="col-xs-12 glyphicon glyphicon-trash" data-bind="click: $root.removeProduct"span></span>
+		                        </td>
+							@endif
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<div class="col-xs-12 line center"><br /><br />
+				{{ link_to('pedidos', 'Cancelar', array('class' => 'btn btn-danger')) }}
+				@if ( ! $selectedSupplierOrder->id)
+					{{ Form::button('Guardar', array('data-bind' => 'click: save', 'id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
+				@else
+					{{ Form::hidden('received', '1') }}
+					{{ Form::button('Recibido', array('data-bind' => 'click: save', 'id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
+				@endif
+				{{ Form::hidden('id', $selectedSupplierOrder->id, array('id' => 'id')) }}
+				{{ Form::textArea('products', json_encode($products), array('id' => 'products', 'class' => 'hide')) }}
+			</div>
+		</div>
+	{{ Form::close() }}
 @stop
-@if($selectedSupplier->id)
-	@section('js')
-		@parent
-		<script type="text/javascript">
-			TESIS.Suppliers = TESIS.Suppliers || {};
 
-			TESIS.Suppliers = {
-				setListeners: function(){
-					$('#not_selected').multiSelect({
-						selectableHeader: "<span>Disponibles:</div>",
-						selectionHeader: "<span>Seleccionados:</div>",
-						afterSelect: function(values){
-							$.ajax({
-								url: TESIS.url+'/distribuidoresProductos',
-								type: 'post',
-								data: { 
-									supplierOrderId: '{{$selectedSupplier->id}}', 
-									items: values, 
-									action: 'select', 
-									_token: '{{csrf_token()}}' 
-								},
-								dataType: 'json',
-								success: function(data){
-									//maybe do something here.
-								}
-							});
-						},
-						afterDeselect: function(values){
-							$.ajax({
-								url: TESIS.url+'/distribuidoresProductos',
-								type: 'post',
-								data: { 
-									supplierOrderId: '{{$selectedSupplier->id}}', 
-									items: values, 
-									action: 'deselect', 
-									_token: '{{csrf_token()}}' 
-								},
-								dataType: 'json',
-								success: function(data){
-									//maybe do something here.
-								}
-							});
-						}
-					});
-				},
-				init: function() {
-					TESIS.Suppliers.setListeners();
-				}
-			};
+@section('js')
+	@parent
+	<script type="text/javascript">
+		TESIS.Suppliers = TESIS.Suppliers || {};
 
-			$(document).ready(function() {
-				TESIS.Suppliers.init();
-			});
-		</script>
-	@stop
-@endif
+		TESIS.Suppliers = {
+			products: function(data) {
+                var self = this;
+                self.id = ko.observable(data.id);
+                self.amount = ko.observable(data.amount);
+                self.name = ko.observable(data.name);
+            },
+            AppViewModel: function() {
+                var self = this;
+                var aux = [];
+                var products_data = JSON.parse($('#products').val());
+		        if(products_data != 0){
+		            $.each(products_data, function(index,value) {
+		                aux.push(new TESIS.Suppliers.products( {id:value.id, name:value.name, amount:value.pivot.amount} )); 
+		            });
+		            self.products = ko.observableArray(aux);
+		        }else{
+		            self.products = ko.observableArray();
+		        }
+
+                self.addProduct = function(id, name) {
+                    var newProduct = new TESIS.Suppliers.products({
+                        id: id,
+                        amount: 1,
+                        name: name
+                    });
+
+                    var match = ko.utils.arrayFirst(self.products(), function(item) {
+                        return newProduct.id() == item.id();
+                    });
+
+                    if ( ! match) {
+                        self.products.push(newProduct);
+                    } else {
+                        alert('No puede agregar 2 veces el mismo producto.');
+                    }
+                };
+                self.removeProduct = function(product) {
+                    self.products.remove(product);  
+                };
+                self.addAmount = function(product) {
+                    product.amount(product.amount()+1);
+                };
+                self.decreaseAmount = function(product) {
+                    if(product.amount() > 1) {
+                        product.amount(product.amount()-1);
+                    }
+                };
+                self.save = function() {
+                    var params = ko.toJSON(self.products);
+                    $('#products').val(params);
+                    $('#btnSubmit').attr('disabled',true);
+                    $('#frmSupplier').submit();
+                }
+            },
+			setListeners: function(){
+				$('#suppliers_id').on('change',function(){
+					$.ajax({
+                        url: TESIS.url + '/productos/cargarProductosProveedor',
+                        data: {
+                        	_token: '{{ csrf_token() }}',
+                        	suppliersId: $(this).val()
+                        },
+                        type: "post",
+                        dataType: 'html',
+                        success: function(data) {
+                        	$('#product').val('');
+                            $('#product').parent('div').html(data);
+                            $('#product').on('change', function(){
+                            	var context = ko.contextFor(this);
+                            	context.$root.addProduct($(this).val(), $(this).children('option:selected').text());
+                            });
+                        }
+                    });
+				});
+			},
+			init: function() {
+				TESIS.Suppliers.setListeners();
+				ko.applyBindings(new TESIS.Suppliers.AppViewModel());
+			}
+		};
+
+		$(document).ready(function() {
+			TESIS.Suppliers.init();
+		});
+	</script>
+@stop

@@ -36,12 +36,17 @@ class SupplierController extends BaseController
         	if (! $supplierId) {
         		$supplier = new Supplier;
         	}
-        	$supplier->name = $post['name'];
-        	$supplier->minimum_stock = $post['minimum_stock'];
-        	$supplier->cost = $post['cost'];
+            $supplier->name = $post['name'];
+            $supplier->ruc = $post['ruc'];
+            $supplier->address = $post['address'];
+            $supplier->phone = $post['phone'];
+            $supplier->email = $post['email'];
+            $supplier->web = $post['web'];
+            $supplier->contact = $post['contact'];
+            $supplier->contact_phone = $post['contact_phone'];
     		$supplier->save();
 
-        	if ($post['status']='inactive') {
+        	if ($post['status']=='inactive') {
         		$supplier->delete();
         	} else {
         		if ($supplier->trashed()) {
@@ -59,7 +64,8 @@ class SupplierController extends BaseController
     {
         $post = Input::all();
         $supplierId = $post['supplierId'];
-        $supplier = Supplier::find($supplierId);
+        $supplier = Supplier::withTrashed()->find($supplierId);
+        
         if ($post['action'] == 'select') {
             $supplier->products()->attach($post['items'][0]);
         } else {

@@ -48,7 +48,7 @@ class LoginController extends BaseController
 		if ($validator->fails()) {
             return Redirect::to('cambiarContrasena')->withErrors($validator)->withInput();
         } else {
-        	if (Hash::check($post['current_pass'], Auth::user()->password)) {
+        	if ( ! Hash::check($post['current_pass'], Auth::user()->password)) {
         		Session::flash('error','La contraseña actual es incorrecta');
         		return Redirect::to('cambiarContrasena');
         	} else {

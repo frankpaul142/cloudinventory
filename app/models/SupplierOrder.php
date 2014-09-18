@@ -1,18 +1,15 @@
 <?php
 
-class Supplier extends Eloquent
+class SupplierOrder extends Eloquent
 {
     protected $table = 'supplier_orders';
 
     public static function validate($post)
 	{
         $id = $post['id'] ? $post['id'] : 0;
-        //reglas de validacion
         $rules = array(
-            'name' => 'required|unique:products,name,' . $id,
-            'ruc' => 'required',
-            'cost' => 'required',
-            'minimum_stock' => 'required',
+            'suppliers_id' => 'required',
+            'products' => 'required'
         );
         $validator = Validator::make($post, $rules);
         
@@ -20,9 +17,9 @@ class Supplier extends Eloquent
 	}
 
     public function products(){
-        return $this->hasMany('Product');
+        return $this->belongsToMany('Product','order_details','suppliers_id','products_id')->withPivot('amount', 'cost');
     }
     public function supplier(){
-        return $this->belongsTo('Supplier');
+        return $this->belongsTo('Supplier', 'suppliers_id');
     }
 }

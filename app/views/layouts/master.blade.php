@@ -31,8 +31,8 @@
 							<li>{{ link_to('productos', 'Productos') }}</li>
 							<li>{{ link_to('distribuidores', 'Distribuidores') }}</li>
 							<li>{{ link_to('pedidos', 'Pedidos') }}</li>
-							<li>{{ link_to('', 'Ajustes') }}</li>
-							<li>{{ link_to('', 'Alertas') }}</li>
+							<li>{{ link_to('ajustes', 'Ajustes') }}</li>
+							<li>{{ link_to('alertas', 'Receptores de alertas') }}</li>
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
@@ -77,11 +77,12 @@
 			</div>
 			<!-- Javascripts -->
 		    @section('js')
-		        {{ HTML::script('js/jquery-1.11.1.min.js') }}
+		        {{ HTML::script('js/jquery-1.10.2.min.js') }}
 		        {{ HTML::script('js/bootstrap.min.js') }}
 		        {{ HTML::script('js/jquery.autosize.min.js') }}
 		        {{ HTML::script('js/jquery.dataTables.min.js') }}
 		        {{ HTML::script('js/jquery.multi-select.js') }}
+		        {{ HTML::script('js/knockout.js') }}
 		        <script type="text/javascript">
 		            var TESIS = TESIS || {};
 		            TESIS.url = '{{ URL::to('') }}';

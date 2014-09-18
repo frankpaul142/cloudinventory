@@ -11,9 +11,11 @@ class Supplier extends Eloquent
         //reglas de validacion
         $rules = array(
             'name' => 'required|unique:products,name,' . $id,
-            'ruc' => 'required',
-            'cost' => 'required',
-            'minimum_stock' => 'required',
+            'ruc' => 'required|unique:suppliers,ruc,' . $id,
+            'email' => 'required',
+            'contact' => 'required',
+            'contact_phone' => 'required',
+
         );
         $validator = Validator::make($post, $rules);
         
