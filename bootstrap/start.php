@@ -26,7 +26,7 @@ $app = new Illuminate\Foundation\Application;
 
 $env = $app->detectEnvironment(array(
 
-	'local' => array('escuok-pc'),
+	'local' => array('escuok-pc','MacBook-Pro-de-Franklin.local'),
 
 ));
 
