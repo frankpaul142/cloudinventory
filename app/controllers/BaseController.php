@@ -1,5 +1,8 @@
 <?php
 
+use Facebook\FacebookSession;
+use Facebook\FacebookRequest;
+use Facebook\FacebookSDKException;
 
 class BaseController extends Controller {
 

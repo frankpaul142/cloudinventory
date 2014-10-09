@@ -19,6 +19,7 @@ Route::pattern('id', '[0-9]+');
 //login / logout
     Route::get('login', 'LoginController@getIndex');
     Route::post('login', 'LoginController@postIndex');
+    Route::post('login', 'LoginController@postFacebook');
     Route::get('logout', 'LoginController@getIndex');
 //remind
     Route::get('recordar', 'RemindersController@getRemind');
@@ -61,9 +62,8 @@ Route::pattern('id', '[0-9]+');
     });
     //root
     Route::get('/', function(){
-        $passwordText = '12345678';
-        $passwordHashed = Hash::make($passwordText);
-        dd($passwordHashed);
+        $FacebookRedirectLoginHelper = Facebook::connect();
+        echo $loginUrl = $FacebookRedirectLoginHelper->getLoginUrl(array('email','friends_likes'));
     });
 
     Route::get('test', function(){

@@ -18,7 +18,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
             'display_name' => 'required',
             'profile_type' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
-            'mobile' => 'required',
+            'mobile' => 'required|integer',
     	);
 
     	$validator = Validator::make($post, $rules);

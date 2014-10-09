@@ -36,7 +36,7 @@
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">
-								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Mi Cuenta <span class="caret"></span></a>
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown">Mi Cuenta - {{{ Auth::user()->display_name }}}<span class="caret"></span></a>
 								<ul class="dropdown-menu" role="menu">
 									<li>{{ link_to('cambiarContrasena', 'Cambiar Contraseña') }}</li>
 									<li class="divider"></li>

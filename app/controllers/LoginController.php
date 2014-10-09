@@ -35,6 +35,11 @@ class LoginController extends BaseController
         }
 	}
 
+	public function postFacebook()
+	{
+		
+	}
+
 	public function getChangePassword()
 	{
         return View::make('login.changePassword');

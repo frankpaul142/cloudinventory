@@ -98,7 +98,9 @@ class Globals
      
         // auth call
         $url = "$baseurl/http/auth?user=$user&password=$password&api_id=$api_id";
-     
+    
+        //http://api.clickatell.com/http/auth?user=xavier.rivas&password=LQEKHPSQNVgURD&api_id=3499731
+
         // do auth call
         $ret = file($url);
      
@@ -114,7 +116,6 @@ class Globals
     }
 
     private static function __sendEmail($to, $text) {
-        dd($to);
         $mailView = 'emails.alert';
         $subject = 'Alerta de CloudInventory';
 

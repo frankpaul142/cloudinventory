@@ -10,11 +10,13 @@ class Supplier extends Eloquent
         $id = $post['id'] ? $post['id'] : 0;
         //reglas de validacion
         $rules = array(
-            'name' => 'required|unique:products,name,' . $id,
+            'name' => 'required|unique:suppliers,name,' . $id,
             'ruc' => 'required|unique:suppliers,ruc,' . $id,
-            'email' => 'required',
+            'phone' => 'integer',
+            'web' => 'url',
+            'email' => 'required|email',
             'contact' => 'required',
-            'contact_phone' => 'required',
+            'contact_phone' => 'required|integer',
 
         );
         $validator = Validator::make($post, $rules);

@@ -56,7 +56,7 @@ class SupplierOrderController extends BaseController
 
                         $supplierOrder->products()->sync($toSync);
                     } else {
-                        if(isset($post['received']) AND $post['received'] == 1) {
+                        if (isset($post['received']) AND $post['received'] == 1) {
                             $supplierOrder->status = 'received';
                             $supplierOrder->save();
 
@@ -68,6 +68,9 @@ class SupplierOrderController extends BaseController
                                     $product->save();
                                 }
                             }
+                        } elseif (isset($post['received']) AND $post['received'] == 2) {
+                            $supplierOrder->status = 'canceled';
+                            $supplierOrder->save();                            
                         } else {
                             Session::flash('error', 'Error en la recepción de su pedido, por favor vuelva a intentarlo.');
                         }

@@ -84,12 +84,13 @@
 			</div>
 			
 			<div class="col-xs-12 line center"><br /><br />
-				{{ link_to('pedidos', 'Cancelar', array('class' => 'btn btn-danger')) }}
+				{{ link_to('pedidos', 'Regresar', array('class' => 'btn btn-danger')) }}
 				@if ( ! $selectedSupplierOrder->id)
 					{{ Form::button('Guardar', array('data-bind' => 'click: save', 'id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
 				@else
-					{{ Form::hidden('received', '1') }}
-					{{ Form::button('Recibido', array('data-bind' => 'click: save', 'id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
+					{{ Form::hidden('received', '1', array('id' => 'received')) }}
+					{{ Form::button('Recibido', array('id' => 'btnSubmit', 'class' => 'btn btn-primary')) }}
+					{{ Form::button('Cancelar', array('id' => 'btnCancel', 'class' => 'btn btn-warning')) }}
 				@endif
 				{{ Form::hidden('id', $selectedSupplierOrder->id, array('id' => 'id')) }}
 				{{ Form::textArea('products', json_encode($products), array('id' => 'products', 'class' => 'hide')) }}
@@ -177,6 +178,18 @@
                             });
                         }
                     });
+				});
+				$('#btnSubmit').on('click', function(){
+					$('#btnSubmit').attr('disabled',true);
+					$('#btnCancel').attr('disabled',true);
+                    $('#frmSupplier').submit();
+				});
+
+				$('#btnCancel').on('click', function(){
+					$('#received').val('2');
+					$('#btnSubmit').attr('disabled',true);
+					$('#btnCancel').attr('disabled',true);
+                    $('#frmSupplier').submit();
 				});
 			},
 			init: function() {
