@@ -45,7 +45,49 @@ Route::filter('auth.basic', function()
 });
 
 Route::filter('pageControl', function(){
-	
+	if (Auth::check()) {
+		$segments = Request::segments();
+		//remove parameters
+	    foreach ($segments as $key => $value) {
+	        if (is_numeric($value)) {
+	            unset($segments[$key]);
+	        }
+	    }
+	    $url = implode('/',$segments);
+
+		if (Auth::user()->profile_type == 'admin') {
+			$allowedUrls = array(
+				'inicio',
+				'cambiarContrasena',
+				'usuarios',
+				'productos',
+				'productos/cargarProductosProveedor',
+				'distribuidores',
+				'distribuidoresProductos',
+				'pedidos',
+				'ajustes',
+				'alertas'
+			);
+		} else {
+			$allowedUrls = array(
+				'inicio',
+				'cambiarContrasena',
+				'productos',
+				'productos/cargarProductosProveedor',
+				'distribuidores',
+				'distribuidoresProductos',
+				'pedidos',
+				'alertas'
+			);
+		}
+
+		if ( ! in_array($url, $allowedUrls)) {
+			return Redirect::to('inicio');
+		}
+	} 
+	// else {
+	// 	return Redirect::to('login');
+	// }
 });
 
 /*

@@ -21,18 +21,25 @@
 				<div class="container-fluid">
 					<!-- Brand and toggle get grouped for better mobile display -->
 					<div class="navbar-header">
-						<a class="navbar-brand" href="#">CloudInventory</a>
+						<a class="navbar-brand" href="inicio">CloudInventory</a>
 					</div>
 
 					<!-- Collect the nav links, forms, and other content for toggling -->
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 						<ul class="nav navbar-nav">
-							<li>{{ link_to('usuarios', 'Usuarios') }}</li>
-							<li>{{ link_to('productos', 'Productos') }}</li>
-							<li>{{ link_to('distribuidores', 'Distribuidores') }}</li>
-							<li>{{ link_to('pedidos', 'Pedidos') }}</li>
-							<li>{{ link_to('ajustes', 'Ajustes') }}</li>
-							<li>{{ link_to('alertas', 'Receptores de alertas') }}</li>
+							@if (Auth::user()->profile_type == 'admin')
+								<li>{{ link_to('usuarios', 'Usuarios') }}</li>
+								<li>{{ link_to('productos', 'Productos') }}</li>
+								<li>{{ link_to('distribuidores', 'Distribuidores') }}</li>
+								<li>{{ link_to('pedidos', 'Pedidos') }}</li>
+								<li>{{ link_to('ajustes', 'Ajustes') }}</li>
+								<li>{{ link_to('alertas', 'Receptores de alertas') }}</li>
+							@else
+								<li>{{ link_to('productos', 'Productos') }}</li>
+								<li>{{ link_to('distribuidores', 'Distribuidores') }}</li>
+								<li>{{ link_to('pedidos', 'Pedidos') }}</li>
+								<li>{{ link_to('alertas', 'Receptores de alertas') }}</li>
+							@endif
 						</ul>
 						<ul class="nav navbar-nav navbar-right">
 							<li class="dropdown">

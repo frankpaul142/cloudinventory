@@ -5,7 +5,7 @@
 		Pendientes
 	</div>
 	<div class="col-xs-2 line">
-		{{ link_to('distribuidores', '', array('class' => 'glyphicon glyphicon-plus', 'style' => 'color: green;font-size: 1em;')) }}
+		{{ link_to('pedidos', '', array('class' => 'glyphicon glyphicon-plus', 'style' => 'color: green;font-size: 1em;')) }}
 	</div>
 @stop
 @section('left-content')
@@ -54,6 +54,8 @@
 						<tr>
 	                        <th class="col-xs-2">Cantidad</th>
 	                        <th>Producto</th>
+	                        <th>Costo Unitario</th>
+	                        <th>Costo Total</th>
 	                        @if ( ! $selectedSupplierOrder->id)
 								<th class="col-xs-1">Acciones</th>
 							@endif	
@@ -73,6 +75,8 @@
 		                        </td>
 							@endif
 	                        <td data-bind="text: name"></td>
+	                        <td data-bind="text: cost"></td>
+	                        <td data-bind="text: total"></td>
 	                        @if ( ! $selectedSupplierOrder->id)
 		                        <td>
 		                            <span class="col-xs-12 glyphicon glyphicon-trash" data-bind="click: $root.removeProduct"span></span>
@@ -109,6 +113,8 @@
                 var self = this;
                 self.id = ko.observable(data.id);
                 self.amount = ko.observable(data.amount);
+                self.cost = ko.observable(data.cost);
+                self.total = ko.observable(data.total);
                 self.name = ko.observable(data.name);
             },
             AppViewModel: function() {
@@ -117,7 +123,7 @@
                 var products_data = JSON.parse($('#products').val());
 		        if(products_data != 0){
 		            $.each(products_data, function(index,value) {
-		                aux.push(new TESIS.Suppliers.products( {id:value.id, name:value.name, amount:value.pivot.amount} )); 
+		                aux.push(new TESIS.Suppliers.products( {id:value.id, name:value.name, amount:value.pivot.amount, cost:value.pivot.cost, total:(value.pivot.amount * value.pivot.cost)} )); 
 		            });
 		            self.products = ko.observableArray(aux);
 		        }else{

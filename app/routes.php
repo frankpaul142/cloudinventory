@@ -19,7 +19,7 @@ Route::pattern('id', '[0-9]+');
 //login / logout
     Route::get('login', 'LoginController@getIndex');
     Route::post('login', 'LoginController@postIndex');
-    Route::post('login', 'LoginController@postFacebook');
+    // Route::post('login', 'LoginController@postFacebook');
     Route::get('logout', 'LoginController@getIndex');
 //remind
     Route::get('recordar', 'RemindersController@getRemind');
@@ -28,6 +28,10 @@ Route::pattern('id', '[0-9]+');
     Route::post('recordar/form', 'RemindersController@postReset');
 
     Route::group(array('before' => 'auth|pageControl'), function(){
+        //home
+        Route::get('inicio', function(){
+            return View::make('home');
+        });
 
         //change password on first login
         Route::get('cambiarContrasena', 'LoginController@getChangePassword');
@@ -60,13 +64,15 @@ Route::pattern('id', '[0-9]+');
         Route::post('alertas', 'AlertController@post');
 
     });
+
     //root
     Route::get('/', function(){
-        $FacebookRedirectLoginHelper = Facebook::connect();
-        echo $loginUrl = $FacebookRedirectLoginHelper->getLoginUrl(array('email','friends_likes'));
+        return Redirect::to('inicio');
+        // $FacebookRedirectLoginHelper = Facebook::connect();
+        // echo $loginUrl = $FacebookRedirectLoginHelper->getLoginUrl(array('email','friends_likes'));
     });
 
     Route::get('test', function(){
-        Globals::triggerAlerts(1, array('productId'=>3));
+        // Globals::triggerAlerts(1, array('productId'=>3));
     });
 

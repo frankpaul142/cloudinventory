@@ -47,6 +47,7 @@ class UserController extends BaseController
     			$passwordHashed = Hash::make($passwordText);
     			$sendMail = true;
     			$user->password = $passwordHashed;
+                $user->is_approved = true;
     		}
 
     		//save user data
