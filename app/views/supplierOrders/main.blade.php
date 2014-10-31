@@ -54,8 +54,8 @@
 						<tr>
 	                        <th class="col-xs-2">Cantidad</th>
 	                        <th>Producto</th>
-	                        <th>Costo Unitario</th>
-	                        <th>Costo Total</th>
+	                        <!-- <th>Costo Unitario</th>
+	                        <th>Costo Total</th> -->
 	                        @if ( ! $selectedSupplierOrder->id)
 								<th class="col-xs-1">Acciones</th>
 							@endif	
@@ -75,8 +75,8 @@
 		                        </td>
 							@endif
 	                        <td data-bind="text: name"></td>
-	                        <td data-bind="text: cost"></td>
-	                        <td data-bind="text: total"></td>
+	                        <!-- <td data-bind="text: cost"></td>
+	                        <td data-bind="text: total"></td> -->
 	                        @if ( ! $selectedSupplierOrder->id)
 		                        <td>
 		                            <span class="col-xs-12 glyphicon glyphicon-trash" data-bind="click: $root.removeProduct"span></span>

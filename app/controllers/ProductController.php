@@ -27,13 +27,19 @@ class ProductController extends BaseController
             return Redirect::to('productos/'.$productId)->withErrors($validator)->withInput();
         } else {
     		$product = self::__checkExistence($productId);
-        	if (! $productId) {
-        		$product = new Product;
+            $isNew = false;
+            if (! $productId) {
+                $product = new Product;
+                $isNew = true;
         	}
         	$product->name = $post['name'];
         	$product->minimum_stock = $post['minimum_stock'];
         	$product->cost = str_replace(',', '.', $post['cost']);
     		$product->save();
+
+            if ($isNew) {
+                Globals::triggerAlerts(4, array('productId'=>$product->id));
+            }
 
         	if ($post['status']=='inactive') {
         		$product->delete();

@@ -54,7 +54,7 @@ class Globals
                 if (isset($additional['supplierOrderId'])) {
                     $supplierOrder = User::find($additional['supplierOrderId']);
                     if ( ! is_null($supplierOrder)) {
-                        $message = 'Se ha creado un nuevo pedido al proveedor ' . $supplierOrder->supplier->name . '.';
+                        $message = 'Se ha recibido un pedido del proveedor ' . $supplierOrder->supplier->name . '.';
                     }
                 }
                 break;

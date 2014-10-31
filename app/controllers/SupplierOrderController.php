@@ -37,7 +37,7 @@ class SupplierOrderController extends BaseController
             try {
                 DB::transaction(function() use ($post){
                     $supplierOrder = self::__checkExistence($post['id']);
-                    if (! $supplierOrder) {
+                    if (! $supplierOrder) { //new order
                         $supplierOrder = new SupplierOrder;
                         $supplierOrder->suppliers_id = $post['suppliers_id'];
                         $supplierOrder->users_id = Auth::user()->id;
@@ -55,8 +55,10 @@ class SupplierOrderController extends BaseController
                         }
 
                         $supplierOrder->products()->sync($toSync);
+
+                        Globals::triggerAlerts(5, array('supplierOrderId'=>$supplierOrder->id));
                     } else {
-                        if (isset($post['received']) AND $post['received'] == 1) {
+                        if (isset($post['received']) AND $post['received'] == 1) { //received
                             $supplierOrder->status = 'received';
                             $supplierOrder->save();
 
@@ -68,7 +70,8 @@ class SupplierOrderController extends BaseController
                                     $product->save();
                                 }
                             }
-                        } elseif (isset($post['received']) AND $post['received'] == 2) {
+                            Globals::triggerAlerts(6, array('supplierOrderId'=>$supplierOrder->id));
+                        } elseif (isset($post['received']) AND $post['received'] == 2) { //canceled
                             $supplierOrder->status = 'canceled';
                             $supplierOrder->save();                            
                         } else {
