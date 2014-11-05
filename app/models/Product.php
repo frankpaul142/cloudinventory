@@ -11,8 +11,10 @@ class Product extends Eloquent
         //reglas de validacion
         $rules = array(
             'name' => 'required|unique:products,name,' . $id,
+            'code' => 'required|unique:products,code,' . $id,
+            'description' => 'required',
             'cost' => 'required|numeric',
-            'minimum_stock' => 'required|integer',
+            'minimum_stock' => 'required|integer|min:0',
         );
         $validator = Validator::make($post, $rules);
         

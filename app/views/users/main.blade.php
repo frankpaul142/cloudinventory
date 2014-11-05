@@ -58,7 +58,7 @@
 				</div>
 				<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('mobile') ? 'has-error' : '' }}">
 					{{ Form::label('mobile', 'Celular:', array('class' => 'control-label')) }}
-					{{ Form::text('mobile', $selectedUser->mobile, array('class' => 'form-control', 'id' => 'mobile')) }}
+					{{ Form::text('mobile', $selectedUser->mobile, array('class' => 'form-control', 'id' => 'mobile', 'placeholder' => '0999999999', 'maxlength' => '10')) }}
 					{{ Form::label('', $errors->first('mobile'), array('class' => 'control-label')) }}
 				</div>
 			</div>

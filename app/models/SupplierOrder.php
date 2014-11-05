@@ -9,7 +9,8 @@ class SupplierOrder extends Eloquent
         $id = $post['id'] ? $post['id'] : 0;
         $rules = array(
             'suppliers_id' => 'required',
-            'products' => 'required'
+            'products' => 'required',
+            'code' => 'required|unique:supplier_orders,code,'.$id,
         );
         $validator = Validator::make($post, $rules);
         

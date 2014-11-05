@@ -31,7 +31,7 @@ return array(
 	"date"                 => "The :attribute is not a valid date.",
 	"date_format"          => "The :attribute does not match the format :format.",
 	"different"            => "The :attribute and :other must be different.",
-	"digits"               => "The :attribute must be :digits digits.",
+	"digits"               => "Debe contener :digits digitos.",
 	"digits_between"       => "The :attribute must be between :min and :max digits.",
 	"email"                => "The :attribute must be a valid email address.",
 	"exists"               => "The selected :attribute is invalid.",
@@ -47,7 +47,7 @@ return array(
 	),
 	"mimes"                => "The :attribute must be a file of type: :values.",
 	"min"                  => array(
-		"numeric" => "The :attribute must be at least :min.",
+		"numeric" => "Valor mínimo es :min.",
 		"file"    => "The :attribute must be at least :min kilobytes.",
 		"string"  => "The :attribute must be at least :min characters.",
 		"array"   => "The :attribute must have at least :min items.",

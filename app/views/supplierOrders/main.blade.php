@@ -11,7 +11,7 @@
 @section('left-content')
 	@foreach ($supplierOrders as $supplierOrder)
 		<div class="col-xs-12 line">
-			{{ link_to('pedidos/'.$supplierOrder->id, substr($supplierOrder->created_at, 0, 10) . ' - ' . $supplierOrder->supplier->name) }}
+			{{ link_to('pedidos/'.$supplierOrder->id, substr($supplierOrder->created_at, 0, 10) . ' - ' . $supplierOrder->code) }}
 			@if($id==$supplierOrder->id)
 				&nbsp;&nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-eye-open"></span>
 			@endif
@@ -47,6 +47,18 @@
 					</div>
 				@endif
 			</div>
+			<div class="col-xs-12 line">
+				<div class="col-xs-5 line form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+					{{ Form::label('code', 'Código:', array('class' => 'control-label')) }}
+					@if ( ! $selectedSupplierOrder->id)
+						{{ Form::text('code', $selectedSupplierOrder->code, array('class' => 'form-control', 'id' => 'code')) }}
+					@else
+						{{ $selectedSupplierOrder->code }}
+						{{ Form::hidden('suppliers_id', $selectedSupplierOrder->code) }}
+					@endif
+					{{ Form::label('', $errors->first('code'), array('class' => 'control-label')) }}
+				</div>
+			</div>
 			
 			<div class="col-xs-12 line">
 				<table id="table" class="table table-striped">
@@ -54,8 +66,8 @@
 						<tr>
 	                        <th class="col-xs-2">Cantidad</th>
 	                        <th>Producto</th>
-	                        <!-- <th>Costo Unitario</th>
-	                        <th>Costo Total</th> -->
+	                        <th>Costo Unitario</th>
+	                        <th>Costo Total</th>
 	                        @if ( ! $selectedSupplierOrder->id)
 								<th class="col-xs-1">Acciones</th>
 							@endif	
@@ -75,8 +87,8 @@
 		                        </td>
 							@endif
 	                        <td data-bind="text: name"></td>
-	                        <!-- <td data-bind="text: cost"></td>
-	                        <td data-bind="text: total"></td> -->
+	                        <td data-bind="text: cost"></td>
+	                        <td data-bind="text: total"></td>
 	                        @if ( ! $selectedSupplierOrder->id)
 		                        <td>
 		                            <span class="col-xs-12 glyphicon glyphicon-trash" data-bind="click: $root.removeProduct"span></span>
@@ -86,7 +98,9 @@
 					</tbody>
 				</table>
 			</div>
-			
+			<div class="col-md-10 line total" data-bind="visible: $root.products().length > 0">
+                Total: $<span data-bind='text: $root.generalTotal'></span>.
+            </div>
 			<div class="col-xs-12 line center"><br /><br />
 				{{ link_to('pedidos', 'Regresar', array('class' => 'btn btn-danger')) }}
 				@if ( ! $selectedSupplierOrder->id)
@@ -121,20 +135,38 @@
                 var self = this;
                 var aux = [];
                 var products_data = JSON.parse($('#products').val());
+
 		        if(products_data != 0){
 		            $.each(products_data, function(index,value) {
-		                aux.push(new TESIS.Suppliers.products( {id:value.id, name:value.name, amount:value.pivot.amount, cost:value.pivot.cost, total:(value.pivot.amount * value.pivot.cost)} )); 
+		                aux.push(new TESIS.Suppliers.products({
+		                	id:value.id, 
+		                	name:value.name, 
+		                	amount:value.pivot.amount, 
+		                	cost:value.pivot.cost, 
+		                	total: (Math.round(value.pivot.amount * value.pivot.cost * 100) / 100).toFixed(2)
+		                })); 
 		            });
 		            self.products = ko.observableArray(aux);
 		        }else{
 		            self.products = ko.observableArray();
 		        }
 
-                self.addProduct = function(id, name) {
+                self.generalTotal = ko.computed(function(){
+                    var tempProducts = ko.toJS(self.products);
+                    var tempTotal = 0;
+                    $.each(tempProducts, function(index, value) {
+                        tempTotal += parseFloat(value.total);
+                    });
+                    return (Math.round(tempTotal*100)/100).toFixed(2);
+                });
+
+                self.addProduct = function(id, name, cost) {
                     var newProduct = new TESIS.Suppliers.products({
                         id: id,
                         amount: 1,
-                        name: name
+                        name: name,
+                        cost: (Math.round(cost*100)/100).toFixed(2),
+                        total: (Math.round(cost*100)/100).toFixed(2),
                     });
 
                     var match = ko.utils.arrayFirst(self.products(), function(item) {
@@ -152,10 +184,14 @@
                 };
                 self.addAmount = function(product) {
                     product.amount(product.amount()+1);
+                    var aux = product.amount()*product.cost();
+                    product.total((Math.round(aux*100)/100).toFixed(2));
                 };
                 self.decreaseAmount = function(product) {
                     if(product.amount() > 1) {
                         product.amount(product.amount()-1);
+                    	var aux = product.amount()*product.cost();
+                        product.total((Math.round(aux*100)/100).toFixed(2));
                     }
                 };
                 self.save = function() {
@@ -163,7 +199,7 @@
                     $('#products').val(params);
                     $('#btnSubmit').attr('disabled',true);
                     $('#frmSupplier').submit();
-                }
+                };
             },
 			setListeners: function(){
 				$('#suppliers_id').on('change',function(){
@@ -180,7 +216,7 @@
                             $('#product').parent('div').html(data);
                             $('#product').on('change', function(){
                             	var context = ko.contextFor(this);
-                            	context.$root.addProduct($(this).val(), $(this).children('option:selected').text());
+                            	context.$root.addProduct($(this).val(), $(this).children('option:selected').text(), $(this).children('option:selected').attr('cost'));
                             });
                         }
                     });
@@ -188,14 +224,12 @@
 				$('#btnSubmit').on('click', function(){
 					$('#btnSubmit').attr('disabled',true);
 					$('#btnCancel').attr('disabled',true);
-                    $('#frmSupplier').submit();
 				});
 
 				$('#btnCancel').on('click', function(){
 					$('#received').val('2');
 					$('#btnSubmit').attr('disabled',true);
 					$('#btnCancel').attr('disabled',true);
-                    $('#frmSupplier').submit();
 				});
 			},
 			init: function() {

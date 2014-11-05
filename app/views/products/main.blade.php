@@ -29,7 +29,7 @@
 			<div class="col-xs-12 line">
 				<div class="col-xs-5 line form-group {{ $errors->has('name') ? 'has-error' : '' }}">
 					{{ Form::label('name', 'Producto:', array('class' => 'control-label')) }}
-					{{ Form::text('name', $selectedProduct->name, array('class' => 'form-control', 'id' => 'name')) }}
+					{{ Form::text('name', $selectedProduct->name, array('class' => 'form-control', 'id' => 'name', 'maxlength' => '45')) }}
 					{{ Form::label('', $errors->first('name'), array('class' => 'control-label')) }}
 				</div>
 				<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('cost') ? 'has-error' : '' }}">
@@ -47,6 +47,18 @@
 				<div class="col-xs-offset-2 col-xs-5 line form-group">
 					{{ Form::label('stock', 'Stock actual:', array('class' => 'control-label')) }}
 					<br/>{{{ $selectedProduct->stock ? $selectedProduct->stock : 0 }}} unidades
+				</div>
+			</div>
+			<div class="col-xs-12 line">
+				<div class="col-xs-5 line form-group {{ $errors->has('description') ? 'has-error' : '' }}">
+					{{ Form::label('description', 'Descripción:', array('class' => 'control-label')) }}
+					{{ Form::textArea('description', $selectedProduct->description, array('class' => 'form-control', 'id' => 'description')) }}
+					{{ Form::label('', $errors->first('description'), array('class' => 'control-label')) }}
+				</div>
+				<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('code') ? 'has-error' : '' }}">
+					{{ Form::label('code', 'Código:', array('class' => 'control-label')) }}
+					{{ Form::text('code', $selectedProduct->code, array('class' => 'form-control', 'id' => 'code')) }}
+					{{ Form::label('', $errors->first('code'), array('class' => 'control-label')) }}
 				</div>
 			</div>
 			<div class="col-xs-12 line">

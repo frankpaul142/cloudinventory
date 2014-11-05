@@ -25,6 +25,7 @@ class SupplierOrderController extends BaseController
 	public function post()
 	{
 		$post = Input::all();
+
         if ($post['products'] == '[]') {
             $post['products'] = '';
         }
@@ -41,6 +42,7 @@ class SupplierOrderController extends BaseController
                         $supplierOrder = new SupplierOrder;
                         $supplierOrder->suppliers_id = $post['suppliers_id'];
                         $supplierOrder->users_id = Auth::user()->id;
+                        $supplierOrder->code = $post['code'];
                         $supplierOrder->save();
 
                         $products = json_decode($post['products']);

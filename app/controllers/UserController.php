@@ -4,7 +4,10 @@ class UserController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$users = User::withTrashed()->orderBy('last_name')->get();
+		$users = User::withTrashed()
+            ->where('id', '!=', 1)
+            ->orderBy('last_name')
+            ->get();
 
 		$selectedUser = self::__checkExistence($id);
 		if (! $selectedUser) {
@@ -78,6 +81,7 @@ class UserController extends BaseController
         	}
 
         	Session::flash('success', 'Usuario guardado correctamente.');
+            Session::flash('warning', 'Su contraseña fue enviada a su correo electrónico.');
         	return Redirect::to('usuarios');
 
         }
@@ -91,7 +95,7 @@ class UserController extends BaseController
 	* @return User object if $id is found, otherwise false
 	*/
 	private function __checkExistence($id){
-		if (! is_null($id) && $id != '') {
+		if (! is_null($id) && $id != '' && $id != 1) {
     		$user = User::withTrashed()->find($id);
     		if (is_null($user)) {
     			return false;

@@ -32,7 +32,9 @@ class ProductController extends BaseController
                 $product = new Product;
                 $isNew = true;
         	}
-        	$product->name = $post['name'];
+            $product->name = $post['name'];
+            $product->description = $post['description'];
+        	$product->code = $post['code'];
         	$product->minimum_stock = $post['minimum_stock'];
         	$product->cost = str_replace(',', '.', $post['cost']);
     		$product->save();
@@ -61,9 +63,11 @@ class ProductController extends BaseController
             $post = Input::all();
             $supplier = Supplier::find($post['suppliersId']);
             if (! is_null($supplier)) {
-                $products = $supplier->products()->orderBy('name')->get()->lists('name','id');
-                $products = array('' => ' - Seleccione - ') + $products;
-                return Form::select('product', $products, null, array('class' => 'form-control', 'id' => 'product'));
+                $products = $supplier->products()->orderBy('name')->get();
+                
+                return View::make('products.select')
+                    ->with('products', $products)
+                    ->render();
             } else {
                 return Form::select('product', array('' => ' - Seleccione - '), null, array('class' => 'form-control', 'id' => 'product'));
             }
