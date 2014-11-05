@@ -39,10 +39,16 @@
 				</div>
 			</div>
 			<div class="col-xs-12 line">
-				<div class="col-xs-5 line form-group {{ $errors->has('amount') ? 'has-error' : '' }}">
-					{{ Form::label('amount', 'Cantidad:', array('class' => 'control-label')) }}
-					{{ Form::text('amount', $selectedAdjustment->amount, array('class' => 'form-control', 'id' => 'amount')) }}
-					{{ Form::label('', $errors->first('amount'), array('class' => 'control-label')) }}
+				<div class="col-xs-5 line form-group">
+					<div class="col-xs-12 line form-group {{ $errors->has('amount') ? 'has-error' : '' }}">
+						{{ Form::label('amount', 'Cantidad:', array('class' => 'control-label')) }}
+						{{ Form::text('amount', $selectedAdjustment->amount, array('class' => 'form-control', 'id' => 'amount')) }}
+						{{ Form::label('', $errors->first('amount'), array('class' => 'control-label')) }}
+					</div>
+					<div class="col-xs-12 line form-group hide">
+						{{ Form::label('stock', 'Inventario actual:', array('class' => 'control-label')) }}
+						{{ Form::label('0', null, array('class' => 'control-label', 'id' => 'stock')) }}
+					</div>
 				</div>
 				<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('reason') ? 'has-error' : '' }}">
 					{{ Form::label('reason', 'Razón:', array('class' => 'control-label')) }}
@@ -61,4 +67,37 @@
 			</div>
 		</div>
 	{{ Form::close() }}
+@stop
+@section('js')
+	@parent
+	<script type="text/javascript">
+		TESIS.Adjustments = TESIS.Adjustments || {};
+
+		TESIS.Adjustments = {
+			setListeners: function(){
+				$('#products_id').on('change', function(){
+					$.ajax({
+						url: TESIS.url+'/productos/stock',
+						type: 'post',
+						data: { 
+							productId: $(this).val(),
+							_token: '{{csrf_token()}}' 
+						},
+						dataType: 'json',
+						success: function(data){
+							$('#stock').html(data);
+							$('#stock').parent('div').removeClass('hide').addClass('show');
+						}
+					});
+				});
+			},
+			init: function() {
+				TESIS.Adjustments.setListeners();
+			}
+		};
+
+		$(document).ready(function() {
+			TESIS.Adjustments.init();
+		});
+	</script>
 @stop

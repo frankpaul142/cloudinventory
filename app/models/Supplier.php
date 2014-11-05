@@ -11,7 +11,7 @@ class Supplier extends Eloquent
         //reglas de validacion
         $rules = array(
             'name' => 'required|unique:suppliers,name,' . $id,
-            'ruc' => 'required|unique:suppliers,ruc,' . $id,
+            'ruc' => 'required|digits:10|unique:suppliers,ruc,' . $id,
             'phone' => 'integer',
             'web' => 'url',
             'email' => 'required|email',

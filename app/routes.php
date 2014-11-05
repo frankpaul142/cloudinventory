@@ -45,6 +45,7 @@ Route::pattern('id', '[0-9]+');
         Route::get('productos/{id?}', 'ProductController@get');
         Route::post('productos', 'ProductController@post');
         Route::post('productos/cargarProductosProveedor', 'ProductController@postLoadSupplierProducts');
+        Route::post('productos/stock', 'ProductController@postStock');
 
         //suppliers
         Route::get('distribuidores/{id?}', 'SupplierController@get');

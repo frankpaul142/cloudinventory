@@ -74,6 +74,19 @@ class ProductController extends BaseController
         }
     }
 
+    public function postStock()
+    {
+        if (Request::ajax()) {
+            $post = Input::all();
+            $product = Product::find($post['productId']);
+            if (! is_null($product)) {
+                return Response::json($product->stock);
+            } else {
+                return Response::json(0);
+            }
+        }
+    }
+
 
 	### PRIVATE FUNCTIONS ###
 	/**

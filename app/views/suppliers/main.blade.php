@@ -53,7 +53,7 @@
 					<div class="col-xs-12 line">
 						<div class="col-xs-5 line form-group {{ $errors->has('phone') ? 'has-error' : '' }}">
 							{{ Form::label('phone', 'Teléfono:', array('class' => 'control-label')) }}
-							{{ Form::text('phone', $selectedSupplier->phone, array('class' => 'form-control', 'id' => 'phone')) }}
+							{{ Form::text('phone', $selectedSupplier->phone, array('class' => 'form-control', 'id' => 'phone', 'placeholder' => '0999999999', 'maxlength' => '10')) }}
 							{{ Form::label('', $errors->first('phone'), array('class' => 'control-label')) }}
 						</div>
 						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('email') ? 'has-error' : '' }}">

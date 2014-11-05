@@ -13,7 +13,7 @@ class Product extends Eloquent
             'name' => 'required|unique:products,name,' . $id,
             'code' => 'required|unique:products,code,' . $id,
             'description' => 'required',
-            'cost' => 'required|numeric',
+            'cost' => 'required|numeric|min:0',
             'minimum_stock' => 'required|integer|min:0',
         );
         $validator = Validator::make($post, $rules);

@@ -4,7 +4,11 @@ class AlertController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$users = User::all();
+        if(Auth::user()->profile_type == 'admin') {
+            $users = User::all();
+        } else {
+            $users = User::where('id',Auth::user()->id)->get();
+        }
 
 		$selectedUser = self::__checkExistence($id);
 		if (! $selectedUser) {

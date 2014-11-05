@@ -62,6 +62,7 @@ Route::filter('pageControl', function(){
 				'usuarios',
 				'productos',
 				'productos/cargarProductosProveedor',
+				'productos/stock',
 				'distribuidores',
 				'distribuidoresProductos',
 				'pedidos',
