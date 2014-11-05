@@ -69,11 +69,23 @@ class AlertController extends BaseController
 	*/
 	private function __checkExistence($id){
 		if (! is_null($id) && $id != '') {
-    		$supplier = User::find($id);
-    		if (is_null($supplier)) {
-    			return false;
-    		}
-			return $supplier;
+            if (Auth::user()->profile_type == 'admin') {
+                if ($id == Auth::user()->id) {
+                    $supplier = User::find($id);
+                    if (is_null($supplier)) {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            } else {
+                $supplier = User::find($id);
+                if (is_null($supplier)) {
+                    return false;
+                }
+                return $supplier;
+            }
+    		
     	}
 		return false;
 	}

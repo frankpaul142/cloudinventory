@@ -4,9 +4,6 @@
 	<div class="col-xs-10 line">
 		Usuarios
 	</div>
-	<div class="col-xs-2 line">
-		{{ link_to('alertas', '', array('class' => 'glyphicon glyphicon-plus', 'style' => 'color: green;font-size: 1em;')) }}
-	</div>
 @stop
 @section('left-content')
 	@foreach ($users as $user)
