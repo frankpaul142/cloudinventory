@@ -8,6 +8,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface
     protected $softDelete = true;
 
     public static $profiles = array('general' => 'Cliente', 'admin' => 'Administrador');
+    public static $status = array('approved' => 'Aprobado', 'not_approved' => 'No aprobado');
 
 	public static function validate($post)
 	{
