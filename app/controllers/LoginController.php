@@ -63,7 +63,7 @@ class LoginController extends BaseController
 
         	$user->last_name = $userfb->getProperty('last_name');
 
-        	$user->display_name = $userfb->getProperty('name')." ".$userfb->getProperty('last_name');
+        	$user->display_name = $userfb->getProperty('name');
 
         	$user->profile_type = "general";
 
