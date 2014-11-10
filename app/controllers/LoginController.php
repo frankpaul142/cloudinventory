@@ -38,6 +38,8 @@ class LoginController extends BaseController
 	public function getFacebook()
 	{
 		$session = Facebook::process()->getLongLivedSession();
+		Session::put('fbSession',$session);
+		
 		// Access Token
 		$accessToken = $session->getToken();
 		// User info

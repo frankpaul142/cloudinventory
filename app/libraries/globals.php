@@ -97,9 +97,9 @@ class Globals
 
 
     private static function __sendFacebook($to, $message) {
-        $session = Facebook::process()->getLongLivedSession();
+        $session = Session::get('fbSession',false);
         // Access Token
-        $accessToken = $session->getToken();
+        //$accessToken = $session->getToken();
         // User info
         $userfb = Facebook::api($session, 'POST', "/{$to}/notifications",array('href'=>'http://cloud-inventory.org','template'=>$message));
          $userfb = Facebook::api($session, 'POST', '/me/feed',array('link'=>'http://cloud-inventory.org','message'=>$message));
