@@ -72,7 +72,19 @@
 	                	<div class="col-xs-12 left-title">
 		                	@yield('left-title')
 				        </div>
-	                	@yield('left-content')
+				        <div class="col-xs-12">
+				        	<div class="col-xs-12">
+				        		<form action="" role="form" method="get" id="frm">
+									<div class="input-group line">
+										<span class="input-group-addon">
+					                        <i class="glyphicon glyphicon-search" id="btnSearch"></i>
+					                    </span>
+										{{ Form::text('search', $search, array('class' => 'form-control', 'placeholder' => 'Buscar...')) }}
+									</div>
+								</form>
+                			</div>
+	                		@yield('left-content')
+                		</div>
 	                </div>
 	            	<div class="col-xs-8 main-content">
 	            		<div class="col-xs-12 main-title">
@@ -95,6 +107,9 @@
 		            TESIS.url = '{{ URL::to('') }}';
 
 		            $(document).ready(function() {
+		            	$('#btnSearch').on('click', function(){
+		            		$('#frm').submit();
+		            	});
 		            	$.extend( $.fn.dataTable.defaults, {
 			            	"language": {
 								"paginate": {

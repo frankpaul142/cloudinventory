@@ -4,10 +4,24 @@ class UserController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$users = User::withTrashed()
-            ->where('id', '!=', 1)
-            ->orderBy('last_name')
-            ->get();
+        $search = Input::get('search');
+
+        if ( ! is_null($search)) {
+            $users = User::withTrashed()
+                ->where('id', '!=', 1)
+                ->where(function($query) use ($search){
+                    $query->where(DB::raw('CONCAT(last_name," ",name)'), 'like', '%'.$search.'%')
+                          ->orwhere(DB::raw('CONCAT(name," ",last_name)'), 'like', '%'.$search.'%');
+                })
+                ->orderBy('last_name')
+                ->paginate(15);
+        } else {
+            $users = User::withTrashed()
+                ->where('id', '!=', 1)
+                ->orderBy('last_name')
+                ->paginate(15);
+        }
+		
 
 		$selectedUser = self::__checkExistence($id);
 		if (! $selectedUser) {
@@ -19,7 +33,8 @@ class UserController extends BaseController
         return View::make('users.main')
             ->with('id', $id)
         	->with('selectedUser', $selectedUser)
-        	->with('profiles', $profiles)
+            ->with('profiles', $profiles)
+        	->with('search', $search)
         	->with('users', $users);
 	}
 

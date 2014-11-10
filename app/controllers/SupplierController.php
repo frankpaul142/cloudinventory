@@ -4,7 +4,19 @@ class SupplierController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$suppliers = Supplier::withTrashed()->orderBy('name')->get();
+        $search = Input::get('search');
+
+        if ( ! is_null($search)) {
+            $suppliers = Supplier::withTrashed()
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('ruc', 'like', '%'.$search.'%')
+                ->orderBy('name')
+                ->paginate(15);
+        } else {
+            $suppliers = Supplier::withTrashed()
+                ->orderBy('name')
+                ->paginate(15);
+        }
 
 		$selectedSupplier = self::__checkExistence($id);
 		if (! $selectedSupplier) {
@@ -20,6 +32,7 @@ class SupplierController extends BaseController
             ->with('allProducts', $allProducts)
             ->with('selectedSupplierProducts', array_fetch($selectedSupplierProducts,'id'))
         	->with('selectedSupplier', $selectedSupplier)
+            ->with('search', $search)
         	->with('suppliers', $suppliers);
 	}
 

@@ -4,16 +4,22 @@ class AlertController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
+        $search = Input::get('search');
         if(Auth::user()->profile_type == 'admin') {
-            $users = User::all();
+            $users = User::withTrashed()
+                ->where(DB::raw('CONCAT(last_name," ",name)'), 'like', '%'.$search.'%')
+                ->orwhere(DB::raw('CONCAT(name," ",last_name)'), 'like', '%'.$search.'%')
+                ->orderBy('last_name')
+                ->paginate(15);
         } else {
-            $users = User::where('id',Auth::user()->id)->get();
+            $users = User::where('id',Auth::user()->id)
+                ->paginate(15);
         }
 
 		$selectedUser = self::__checkExistence($id);
-		if (! $selectedUser) {
-    		$selectedUser = new User;
-    	}
+        if (! $selectedUser) {
+            $selectedUser = new User;
+        }
 
         $alerts = Alert::all();
 
@@ -33,6 +39,7 @@ class AlertController extends BaseController
             ->with('selectedUserAlerts', $selectedUserAlerts)
             ->with('selectedUser', $selectedUser)
             ->with('users', $users)
+            ->with('search', $search)
             ->with('alerts', $alerts);
 	}
 
@@ -69,9 +76,9 @@ class AlertController extends BaseController
 	*/
 	private function __checkExistence($id){
 		if (! is_null($id) && $id != '') {
-            if (Auth::user()->profile_type == 'admin') {
+            if (Auth::user()->profile_type != 'admin') {
                 if ($id == Auth::user()->id) {
-                    $supplier = User::find($id);
+                    $supplier = User::withTrashed()->find($id);
                     if (is_null($supplier)) {
                         return false;
                     }
@@ -79,7 +86,7 @@ class AlertController extends BaseController
                     return false;
                 }
             } else {
-                $supplier = User::find($id);
+                $supplier = User::withTrashed()->find($id);
                 if (is_null($supplier)) {
                     return false;
                 }

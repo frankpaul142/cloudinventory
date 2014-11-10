@@ -17,6 +17,7 @@
 			@endif
 		</div>
 	@endforeach
+	{{ $adjustments->appends(array('search' => $search))->links() }}
 @stop
 
 

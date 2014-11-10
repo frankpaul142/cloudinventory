@@ -4,7 +4,19 @@ class ProductController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$products = Product::withTrashed()->orderBy('name')->get();
+        $search = Input::get('search');
+
+        if ( ! is_null($search)) {
+            $products = Product::withTrashed()            
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%')
+                ->orderBy('name')
+                ->paginate(15);
+        } else {
+            $products = Product::withTrashed()
+                ->orderBy('name')
+                ->paginate(15);
+        }
 
 		$selectedProduct = self::__checkExistence($id);
 		if (! $selectedProduct) {
@@ -14,7 +26,8 @@ class ProductController extends BaseController
         return View::make('products.main')
             ->with('id', $id)
         	->with('selectedProduct', $selectedProduct)
-        	->with('products', $products);
+        	->with('products', $products)
+            ->with('search', $search);
 	}
 
 	public function post()

@@ -17,6 +17,7 @@
 			@endif
 		</div>
 	@endforeach
+	{{ $supplierOrders->appends(array('search' => $search))->links() }}
 @stop
 
 

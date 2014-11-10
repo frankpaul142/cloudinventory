@@ -17,6 +17,7 @@
 			@endif
 		</div>
 	@endforeach
+	{{ $suppliers->appends(array('search' => $search))->links() }}
 @stop
 
 
@@ -46,7 +47,7 @@
 						</div>
 						<div class="col-xs-offset-2 col-xs-5 line form-group {{ $errors->has('ruc') ? 'has-error' : '' }}">
 							{{ Form::label('ruc', 'RUC:', array('class' => 'control-label')) }}
-							{{ Form::text('ruc', $selectedSupplier->ruc, array('class' => 'form-control', 'id' => 'ruc', 'maxlength' => '10')) }}
+							{{ Form::text('ruc', $selectedSupplier->ruc, array('class' => 'form-control', 'id' => 'ruc', 'maxlength' => '13')) }}
 							{{ Form::label('', $errors->first('ruc'), array('class' => 'control-label')) }}
 						</div>
 					</div>

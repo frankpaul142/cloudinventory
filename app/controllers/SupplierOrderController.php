@@ -4,6 +4,20 @@ class SupplierOrderController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
+        $search = Input::get('search');
+
+        if ( ! is_null($search)) {
+            $supplierOrders = SupplierOrder::withTrashed()
+                ->where('name', 'like', '%'.$search.'%')
+                ->orWhere('ruc', 'like', '%'.$search.'%')
+                ->orderBy('name')
+                ->paginate(15);
+        } else {
+            $supplierOrders = SupplierOrder::withTrashed()
+                ->orderBy('name')
+                ->paginate(15);
+        }
+
 		$supplierOrders = SupplierOrder::where('status','generated')->get();
 
 		$selectedSupplierOrder = self::__checkExistence($id);
@@ -19,6 +33,7 @@ class SupplierOrderController extends BaseController
             ->with('selectedSupplierOrder', $selectedSupplierOrder)
             ->with('products', $products)
         	->with('suppliers', $suppliers)
+            ->with('search', $search)
         	->with('supplierOrders', $supplierOrders);
 	}
 

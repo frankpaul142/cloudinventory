@@ -17,6 +17,7 @@
 			@endif
 		</div>
 	@endforeach
+	{{ $products->appends(array('search' => $search))->links() }}
 @stop
 
 

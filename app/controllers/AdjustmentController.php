@@ -4,7 +4,18 @@ class AdjustmentController extends BaseController
 	### SHOW ALL ###
 	public function get($id = null)
 	{
-		$adjustments = Adjustment::latest()->get();
+        $search = Input::get('search');
+        if ( ! is_null($search)) {
+            $adjustments = Adjustment::select('adjustments.*')
+                ->join('products', 'products.id', '=', 'adjustments.products_id')
+                ->where('products.name', 'like', '%'.$search.'%')
+                ->orwhere('products.code', 'like', '%'.$search.'%')
+                ->orderBy('adjustments.created_at')
+                ->paginate(15);
+        } else {
+            $adjustments = Adjustment::latest()
+                ->paginate(15);
+        }
 
 		$selectedAdjustment = self::__checkExistence($id);
 		if (! $selectedAdjustment) {
@@ -16,6 +27,7 @@ class AdjustmentController extends BaseController
         return View::make('adjustments.main')
             ->with('id', $id)
             ->with('products', $products)
+            ->with('search', $search)
         	->with('selectedAdjustment', $selectedAdjustment)
         	->with('adjustments', $adjustments);
 	}

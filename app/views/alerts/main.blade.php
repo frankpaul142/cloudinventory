@@ -14,6 +14,7 @@
 			@endif
 		</div>
 	@endforeach
+	{{ $users->appends(array('search' => $search))->links() }}
 @stop
 
 
