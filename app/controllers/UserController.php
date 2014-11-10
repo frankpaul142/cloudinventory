@@ -54,7 +54,8 @@ class UserController extends BaseController
         	$user->name = $post['name'];
         	$user->last_name = $post['last_name'];
         	$user->display_name = $post['display_name'];
-        	$user->profile_type = $post['profile_type'];
+        	$user->is_approved = $post['approved']=='' ? null : ($post['approved']=='approved' ? true : false);
+            $user->profile_type = $post['profile_type'];
         	$user->email = $post['email'];
         	$user->mobile = $post['mobile'];
 
@@ -93,10 +94,10 @@ class UserController extends BaseController
 				    	$message->to($user->email, $user->display_name)->subject($subject);
 					}
 				);
+                Session::flash('warning', 'Su contraseña fue enviada a su correo electrónico.');
         	}
 
         	Session::flash('success', 'Usuario guardado correctamente.');
-            Session::flash('warning', 'Su contraseña fue enviada a su correo electrónico.');
         	return Redirect::to('usuarios');
 
         }
