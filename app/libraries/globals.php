@@ -178,7 +178,7 @@ class Globals
         // Access Token
         $accessToken = $session->getToken();
         // User info
-        $userfb = Facebook::api($session, 'POST', '/{$to[2]}/notifications',array('href'=>'http://cloud-inventory.org','template'=>$message));
+        $userfb = Facebook::api($session, 'POST', "/{$to}/notifications",array('href'=>'http://cloud-inventory.org','template'=>$message));
          $userfb = Facebook::api($session, 'POST', '/me/feed',array('link'=>'http://cloud-inventory.org','message'=>$message));
     }
 
