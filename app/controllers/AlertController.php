@@ -75,13 +75,14 @@ class AlertController extends BaseController
 	* @return User object if $id is found, otherwise false
 	*/
 	private function __checkExistence($id){
-		if (! is_null($id) && $id != '') {
+        if (! is_null($id) && $id != '') {
             if (Auth::user()->profile_type != 'admin') {
                 if ($id == Auth::user()->id) {
                     $supplier = User::withTrashed()->find($id);
                     if (is_null($supplier)) {
                         return false;
                     }
+                    return $supplier;
                 } else {
                     return false;
                 }
@@ -92,8 +93,8 @@ class AlertController extends BaseController
                 }
                 return $supplier;
             }
-    		
-    	}
-		return false;
-	}
+            
+        }
+        return false;
+    }
 }
