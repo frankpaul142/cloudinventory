@@ -30,7 +30,7 @@ Route::pattern('id', '[0-9]+');
     Route::group(array('before' => 'auth|pageControl'), function(){
         //home
         Route::get('inicio', function(){
-            return View::make('home')->with('search','');
+            return View::make('home');
         });
 
         //change password on first login

@@ -7,18 +7,17 @@ class SupplierOrderController extends BaseController
         $search = Input::get('search');
 
         if ( ! is_null($search)) {
-            $supplierOrders = SupplierOrder::withTrashed()
-                ->where('name', 'like', '%'.$search.'%')
-                ->orWhere('ruc', 'like', '%'.$search.'%')
-                ->orderBy('name')
+            $supplierOrders = SupplierOrder::select('supplier_orders.*')
+                ->join('suppliers', 'suppliers.id', '=', 'supplier_orders.suppliers_id')
+                ->where('suppliers.name', 'like', '%'.$search.'%')
+                ->orWhere('code', 'like', '%'.$search.'%')
+                ->orderBy('supplier_orders.created_at', 'DESC')
                 ->paginate(15);
         } else {
-            $supplierOrders = SupplierOrder::withTrashed()
-                ->orderBy('name')
+            $supplierOrders = SupplierOrder::where('status','generated')
+                ->orderBy('created_at', 'DESC')
                 ->paginate(15);
         }
-
-		$supplierOrders = SupplierOrder::where('status','generated')->get();
 
 		$selectedSupplierOrder = self::__checkExistence($id);
 		if (! $selectedSupplierOrder) {
