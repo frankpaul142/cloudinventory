@@ -19,7 +19,7 @@ Route::pattern('id', '[0-9]+');
 //login / logout
     Route::get('login', 'LoginController@getIndex');
     Route::post('login', 'LoginController@postIndex');
-    // Route::post('login', 'LoginController@postFacebook');
+    Route::get('login/facebook', 'LoginController@getFacebook');
     Route::get('logout', 'LoginController@getIndex');
 //remind
     Route::get('recordar', 'RemindersController@getRemind');
