@@ -35,7 +35,7 @@
 
                             <div style="margin-top:10px" class="form-group">
                                 <div class="col-sm-12 controls">
-                                    {{ Form::submit('Entrar', array('id' => 'btnSubmit', 'class' => 'btn btn-success')) }}
+                                    {{ Form::submit('Entrar', array('id' => 'btnSubmit', 'class' => 'btn btn-success')) }}									<a href="{{ $loginurl }}"> Login con Facebook </a>
                                 </div>
                             </div>
                         {{ Form::close() }}
